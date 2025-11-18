@@ -1,0 +1,5 @@
+param_id,description
+mix,Shared wet/dry
+chaos_level,0..7 jitter ladder
+limiter_ceiling_db,Limiter ceiling (dBFS)
+out_trim_db,Output trim (dB)
