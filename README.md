@@ -45,6 +45,7 @@ Those machines generally fall into a few families:
 
 - tape / delay / wow-flutter machines
 - dirt / saturation / transient-reactive processors
+- tuned comb / plate / resonator structures
 - stereo imaging / width / finishing tools
 - frozen-buffer / spectral / motion-based spatial tools
 - sequencers, clocks, and generative pattern systems
@@ -138,9 +139,11 @@ If you are new to the repo, these are strong starting points:
 - `control/EnvelopeFollower.h`: audio-to-control bridge
 - `control/EuclideanPattern.h`: rhythm from integer math
 - `control/ScaleQuantizer.h`: harmony constraints from simple pitch math
+- `control/ScaleMap.h`: alternate tuning tables for resonant systems
 - `dsp/Biquad.h`: classic filter structure
 - `dsp/DriveCurves.h`: nonlinear shaping in a compact form
 - `dsp/DynamicWidth.h`: stereo width with transient awareness
+- `dsp/CombBank.h` and `dsp/Plate.h`: compact resonator and wash structures
 - `dsp/WowFlutter.h`: motion as delay-time modulation
 - `dsp/PhaseBlur.h` and `dsp/Doppler.h`: two different spatial movement ideas
 

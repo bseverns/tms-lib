@@ -39,17 +39,17 @@
 2. `core/DelayLine.h`, `core/XorShift32.h`
 3. `control/Param.h`, `control/BlockParam.h`, `control/EnvelopeFollower.h`,
    `control/OnePoleLag.h`, `control/SlewLimiter.h`,
-   `control/TransientDetector.h`
+   `control/TransientDetector.h`, `control/ScaleMap.h`
 4. `dsp/Biquad.h`, `dsp/TiltEQ.h`, `dsp/Allpass.h`, `dsp/AirEQ.h`,
    `dsp/AirLoss.h`
 5. `dsp/BitCrusher.h`, `dsp/WaveFolder.h`, `dsp/StutterGate.h`,
-   `dsp/TremoloMotion.h`, `dsp/DriveCurves.h`
+   `dsp/TremoloMotion.h`, `dsp/DriveCurves.h`, `dsp/CombBank.h`
 6. `dsp/MSMatrix.h`, `dsp/XFeedMatrix.h`, `dsp/DynamicWidth.h`,
    `dsp/WowFlutter.h`, `dsp/PresenceKeeper.h`, `dsp/PhaseBlur.h`,
-   `dsp/Doppler.h`
+   `dsp/Doppler.h`, `dsp/Plate.h`
 7. `control/ClockEngine.h`, `control/TempoTransport.h`,
    `control/MidiClockTransport.h`, `control/ClockPulseTransport.h`,
-   `control/OrbitPath.h`, `control/EuclideanPattern.h`,
+   `control/OrbitPath.h`, `control/EuclideanPattern.h`, `control/SyncUtils.h`,
    `control/ScaleQuantizer.h`
 8. `dsp/LimiterLookahead.h` as the "finish this in lab" example
 
@@ -93,6 +93,8 @@
   pulse following.
 - `control/OrbitPath.h`: turn geometry into modulation.
 - `control/EuclideanPattern.h`: derive distributed rhythm from integer math.
+- `control/ScaleMap.h` versus `control/ScaleQuantizer.h`: one maps integer
+  degrees into tunings, the other snaps free pitch values onto a scale.
 - `control/ScaleQuantizer.h`: connect raw control voltages or note offsets to
   harmonic constraints.
 - `dsp/BitCrusher.h` + `dsp/WaveFolder.h` + `dsp/StutterGate.h`: three very
@@ -103,6 +105,8 @@
   source recedes, the other selectively restores intelligibility.
 - `dsp/PhaseBlur.h` + `dsp/Doppler.h`: two different ways to make motion feel
   spatial, one by wandering offsets and one by moving the read head itself.
+- `dsp/CombBank.h` versus `dsp/Plate.h`: resonant tuned structure versus dense
+  stereo wash.
 
 ## Equipment-aware lab ideas
 - Breadboard one potentiometer and print raw ADC versus smoothed value using
@@ -115,6 +119,8 @@
   `XFeedMatrix` so students can hear stereo image changes directly.
 - Feed a drum loop or click track into `TransientDetector` and print the
   activity value to tune sensitivity by ear and by meter.
+- Tune `CombBank` with `ScaleMap` and compare chromatic, pelog, and gamelan
+  response using the same excitation.
 
 ## Lab ideas
 - Extend `dsp/LimiterLookahead.h` from clamp -> envelope follower ->
@@ -132,6 +138,8 @@
   discuss “brightness” versus “presence” versus “distance.”
 - Use `PhaseBlur` and `Doppler` as two separate motion engines for a frozen
   sample exercise.
+- Feed an impulse or short click into `CombBank`, then into `Plate`, and study
+  the difference between resonator banks and reverb networks.
 
 ## Suggested classroom kits
 - Minimal control kit:
