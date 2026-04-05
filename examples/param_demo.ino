@@ -15,10 +15,11 @@ void setup(){
 }
 
 void loop(){
-  // Move target gently using a pseudo-random walk
+  // Move the target gently with a pseudo-random walk, then let the smoother
+  // chase it. This is a simple zipper-noise lecture in 10 lines.
   float step = (chaos.rand01()-0.5f)*200.0f;
-  cutoff.setTarget(cutoff.current + step);
+  cutoff.setTarget(cutoff.current() + step);
   float v = cutoff.tick();
-  Serial.printf("cutoff=%.1f\n", v);
+  Serial.printf("target=%.1f current=%.1f\n", cutoff.target(), v);
   delay(10);
 }

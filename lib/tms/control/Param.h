@@ -5,5 +5,7 @@ struct Param{ ParamSpec spec; float cur=0, tgt=0, a=0;
   void init(const ParamSpec& s){ spec=s; cur=tgt=s.defv; setSmoothMs(s.smoothMs); }
   void setSmoothMs(float ms){ float tau=ms*0.001f; a= (tau>0)? expf(-1.0f/(tau*kSampleRate)) : 0.0f; }
   void setTarget(float v){ tgt=clampf(v,spec.minv,spec.maxv); }
-  inline float tick(){ cur = a*cur + (1.0f-a)*tgt; return cur; } };
+  inline float tick(){ cur = a*cur + (1.0f-a)*tgt; return cur; }
+  inline float current() const { return cur; }
+  inline float target() const { return tgt; } };
 }
