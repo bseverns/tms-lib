@@ -81,7 +81,7 @@ trying to maximize teachability.
 
 The expected hardware/software setup is simple:
 
-- `Teensy 4.0` or `Teensy 4.1`
+- `Teensy 4.0` or `Teensy 4.1` (these systems were designed around the Cortex M7 MCU's speed, but technically-speaking you could use an Uno if speed wasn't a factor)
 - solderless breadboard
 - jumper wires
 - `2-6` potentiometers, buttons, and a few LEDs
