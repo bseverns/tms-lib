@@ -1,207 +1,176 @@
 # tms-lib
 
-`tms-lib` is a small, header-only DSP and control toolkit for teaching
-embedded audio systems.
+A shelf of jarred specimens from machines I've made.
 
-It is not a single instrument firmware. It is a curated library of the
-building blocks that show up across a family of custom machines: delay boxes,
-looper/orbit systems, stereo finishers, granular/generative sequencers,
-rhythm engines, and performance control surfaces.
+A delay line from one box. A rhythm rule from another. A little mechanism for
+making a sound wander, break apart, or hang in the air. `tms-lib` collects those
+pieces in small C++ headers so they can be opened up, taught, changed, and put
+into something else.
 
-Some of those source machines are public, some are not. This repo deliberately
-does not depend on linking back out to them. Instead, it gathers the most
-teachable parts into one place, trims them down, and makes them readable in a
-classroom setting.
+The machines were where these ideas got worked out. This is where I keep the
+parts I want to look at again—and share without asking someone to learn an
+entire instrument's firmware first.
 
-## What This Repo Is For
+Some specimens are simplified extractions. Others are fresh explanations of a
+mechanism that appeared in an older project. The labels matter: the
+[source map](docs/SOURCE_MAP.md) records where an idea came from and what changed
+on its way here.
 
-This repo exists to answer a practical question:
+## Why keep the jars?
 
-How do you teach DSP, musical control systems, and embedded instrument design
-without dropping students into a 20,000-line firmware codebase on day one?
+For teaching, mostly. Also for remembering what I was thinking when I built a
+particular machine, and finding connections between projects that started in
+different places.
 
-The answer here is:
+A small header gives us something we can read together. We can find the state,
+follow the math, change one number, and listen to what happens. An envelope can
+become a meter, a pitch gesture, or the edge of a grain. A moving read head can
+become a sampler, a looper, or a source passing by the listener.
 
-- use very small headers
-- keep the blocks composable
-- prefer serial-printable examples first
-- move from one concept to one block to one machine
+The useful lesson is often in that change of context. Take a specimen off the
+shelf, understand one behavior, then see what else it can do.
 
-## Who It Is For
+## What's on the shelf
 
-- students learning embedded DSP on `Teensy 4.x`
-- artists teaching instrument design or physical computing
-- developers who want compact reference implementations of common musical DSP
-- anyone building custom boxes who wants “the useful middle” between toy code
-  and full production firmware
+The collection draws from delay boxes, resonator gardens, samplers, loopers,
+stereo processors, spatial experiments, and rhythm machines. You'll find:
 
-## The Machines Behind It
+- clocks, gates, Euclidean rhythms, and pitch constraints
+- smoothing, envelopes, transient detection, and modulation
+- filters, saturation, combs, and small reverb structures
+- stereo width, crossfeed, paths, and delay-time motion
+- oscillators, sample slices, looping read heads, and grains
+- short impulse responses, frequency shifting, and spectral hold
 
-The catalog in this repo comes from a broader ecosystem of machines and
-experiments. The point is not to recreate any one of them exactly. The point is
-to extract the recurring ideas.
+There are familiar textbook mechanisms here alongside choices that came out of
+building particular instruments. Both are useful to keep around.
 
-Those machines generally fall into a few families:
+Browse the [header catalog](docs/CATALOG.md), follow an idea back through the
+[source map](docs/SOURCE_MAP.md), or start with an experiment below.
 
-- tape / delay / wow-flutter machines
-- dirt / saturation / transient-reactive processors
-- tuned comb / plate / resonator structures
-- stereo imaging / width / finishing tools
-- frozen-buffer / spectral / motion-based spatial tools
-- sequencers, clocks, and generative pattern systems
-- sampler / looper / pitch-quantized rhythm engines
+## Open a jar on your laptop
 
-In other words:
+You can begin with a compiler and a pair of headphones. The native examples
+print values or write WAV files; no board is needed.
 
-```text
-            performance machines
-                    |
-    -----------------------------------------
-    |           |            |              |
-  timing      control       DSP         spatial motion
-    |           |            |              |
-  clocks     smoothing    filters       paths / blur
-  gates      envelopes    dirt          doppler / air
-  sync       quantizers   delay         stereo image
+You'll need a C++17 compiler and CMake 3.16 or newer.
+
+```sh
+cmake -S . -B build
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+./build/tms_patch
 ```
 
-## Why Header-Only
+That last command prints an impulse, its filtered response, and an envelope as
+CSV. Change the cutoff or follower times, rebuild, and compare the numbers.
 
-Header-only is a deliberate teaching choice.
+For something to listen to:
 
-- Students can open one file and usually understand the whole block.
-- There is very little build-system overhead.
-- It is easy to paste a block into a sketch and modify it live.
-- It keeps the focus on algorithm and state, not project plumbing.
-
-This repo is not trying to model perfect industrial library design. It is
-trying to maximize teachability.
-
-## What You Need
-
-The expected hardware/software setup is simple:
-
-- `Teensy 4.0` or `Teensy 4.1` (these systems were designed around the Cortex M7 MCU's speed, but technically-speaking you could use an Uno if speed wasn't a factor)
-- solderless breadboard
-- jumper wires
-- `2-6` potentiometers, buttons, and a few LEDs
-- USB serial monitor
-- optional audio shield or codec board for audio labs
-
-The deeper classroom notes live in [TEACHING_GUIDE.md](/Users/bseverns/Documents/GitHub/tms-lib/docs/TEACHING_GUIDE.md).
-
-## Repo Map
-
-```text
-tms-lib/
-├── lib/tms/core       low-level utilities, buffers, timing constants, RNG
-├── lib/tms/control    smoothing, transport, quantizers, pattern logic
-├── lib/tms/dsp        filters, motion, dirt, stereo, air/presence tools
-├── lib/tms/io         tap tempo and MIDI-related helpers
-├── lib/tms/interop    small transport / trigger message types
-├── lib/tms/ui         simple performance-facing display helpers
-├── lib/tms/safety     guardrails for real-time systems
-├── examples/          tiny classroom sketches
-└── docs/              teaching notes and provenance
+```sh
+./build/tms_drum build/drum_voice.wav
 ```
 
-## The Main Teaching Idea
+Open the WAV in an audio player. Then change the pitch envelope, remove the
+noise, or stretch the decay. The [synthesis lab](docs/SYNTHESIS_LAB.md) walks
+through the pieces.
 
-A useful musical machine is usually just a few layers stacked together:
+There are several other jars to open. Each lab explains the mechanism, suggests
+changes, and names the assumptions behind the example.
 
-```text
-performer gesture
-    ↓
-control interpretation
-    ↓
-parameter shaping
-    ↓
-DSP block
-    ↓
-mix / output / interaction
+| Experiment | Run after building | Notes |
+| --- | --- | --- |
+| A small drum voice | `./build/tms_drum build/drum_voice.wav` | [Oscillators, envelopes, pitch, and noise](docs/SYNTHESIS_LAB.md) |
+| Sample playback | `./build/tms_sample build/sample_playback.wav` | [Slices, speed, reverse, and loop seams](docs/SAMPLE_LAB.md) |
+| Short convolution | `./build/tms_convolution build/convolution.wav` | [An impulse response as a filter or a little space](docs/CONVOLUTION_LAB.md) |
+| Grains into a cloud | `./build/tms_granular build/granular.wav` | [Windows, overlap, and seeded position spray](docs/GRANULAR_LAB.md) |
+| Frequency shifting | `./build/tms_frequency_shift build/frequency_shift.wav` | [Moving partials by a fixed number of hertz](docs/FREQUENCY_SHIFT_LAB.md) |
+| Spectral hold | `./build/tms_spectral build/spectral_hold.wav` | [Frames, overlap-add, capture, and release](docs/SPECTRAL_LAB.md) |
+
+## Bring a specimen to the bench
+
+The serial sketches are a good first stop on Teensy 4.0 or 4.1. A board and USB
+cable are enough to watch a parameter chase its target, step a rhythm, or follow
+an orbit. Add a pot, button, or LED when you want to connect those behaviors to
+your hands.
+
+With PlatformIO installed:
+
+```sh
+pio run -e teensy41
+pio run -e teensy41 -t upload
+pio device monitor -b 115200
 ```
 
-Concrete examples in this repo:
+`teensy41` and `teensy40` run the parameter demo. `euclid`, `stereo`, and `orbit`
+select the other serial demos on Teensy 4.1.
 
-- a potentiometer goes through `Param`, `OnePoleLag`, or `SlewLimiter`
-- a hit detector goes through `EnvelopeFollower` or `TransientDetector`
-- a rhythm idea goes through `EuclideanPattern` and `TempoTransport`
-- a spatial idea goes through `OrbitPath`, `PhaseBlur`, `AirLoss`, or `Doppler`
-- a tone idea goes through `Biquad`, `TiltEQ`, `AirEQ`, `DriveCurves`, or
-  `PresenceKeeper`
+| Sketch | Idea |
+| --- | --- |
+| [param_demo.ino](examples/param_demo.ino) | Smoothing and target chasing |
+| [euclid_quantizer_demo.ino](examples/euclid_quantizer_demo.ino) | Rhythm and pitch constraints |
+| [stereo_image_demo.ino](examples/stereo_image_demo.ino) | Mid/side, width, and crossfeed |
+| [orbit_motion_demo.ino](examples/orbit_motion_demo.ino) | Geometry becoming modulation |
 
-## Catalog Highlights
+For real audio, the [Teensy audio lab](docs/AUDIO_LAB.md) provides a shared bench:
+Teensy 4.x, an SGTL5000 Audio Shield, and seven selectable patches. Build with
+`pio run -e audio_lab41` or `audio_lab40`. You can listen, feed in line audio,
+and measure callback time and memory use as you change patches. Board
+measurements still need to be collected; the lab includes a procedure and a
+[results sheet](docs/AUDIO_LAB_RESULTS.csv).
 
-If you are new to the repo, these are strong starting points:
+The [teaching guide](docs/TEACHING_GUIDE.md) has classroom routes, equipment
+suggestions, and ideas for combining the blocks.
 
-- `core/Types.h`: basic constants and utility math
-- `control/Param.h`: exponential smoothing
-- `control/EnvelopeFollower.h`: audio-to-control bridge
-- `control/EuclideanPattern.h`: rhythm from integer math
-- `control/ScaleQuantizer.h`: harmony constraints from simple pitch math
-- `control/ScaleMap.h`: alternate tuning tables for resonant systems
-- `dsp/Biquad.h`: classic filter structure
-- `dsp/DriveCurves.h`: nonlinear shaping in a compact form
-- `dsp/DynamicWidth.h`: stereo width with transient awareness
-- `dsp/CombBank.h` and `dsp/Plate.h`: compact resonator and wash structures
-- `dsp/WowFlutter.h`: motion as delay-time modulation
-- `dsp/PhaseBlur.h` and `dsp/Doppler.h`: two different spatial movement ideas
+## How the specimens are kept
 
-The full provenance map lives in [SOURCE_MAP.md](/Users/bseverns/Documents/GitHub/tms-lib/docs/SOURCE_MAP.md).
+The library is header-only so most mechanisms can be read in one place. Include
+just the pieces you need:
 
-## Example Progression
-
-The examples are designed to build confidence in small steps:
-
-- [param_demo.ino](/Users/bseverns/Documents/GitHub/tms-lib/examples/param_demo.ino)
-  smoothing and target chasing
-- [euclid_quantizer_demo.ino](/Users/bseverns/Documents/GitHub/tms-lib/examples/euclid_quantizer_demo.ino)
-  rhythm plus pitch quantization
-- [stereo_image_demo.ino](/Users/bseverns/Documents/GitHub/tms-lib/examples/stereo_image_demo.ino)
-  mid/side, width, and crossfeed
-- [orbit_motion_demo.ino](/Users/bseverns/Documents/GitHub/tms-lib/examples/orbit_motion_demo.ino)
-  geometry as modulation
-
-Typical classroom flow:
-
-```text
-serial numbers
-   ↓
-one control block
-   ↓
-one DSP block
-   ↓
-two-block patch
-   ↓
-small instrument sketch
-   ↓
-full custom machine
+```cpp
+#include "tms/dsp/Biquad.h"
 ```
 
-## Design Principles
+The compiler's include path should contain `lib`. CMake projects can link
+`tms::tms`; the [contribution notes](CONTRIBUTING.md) explain integration. For
+Arduino IDE, put one sketch in a folder matching its filename and supply `lib`
+as an include path. The PlatformIO setup already handles that path.
 
-- keep hot-path code obvious
-- avoid allocation on the audio thread
-- prefer small stateful structs over heavy abstractions
-- make the useful math visible
-- use comments to explain intent, not restate syntax
-- preserve enough realism that the code still feels like instrument firmware
+```text
+lib/tms/
+├── core/       math, buffers, phase, and randomness
+├── control/    parameters, envelopes, clocks, and musical rules
+├── dsp/        filters, tone, motion, stereo, and windows
+├── sample/     sample views, playback, and grains
+├── spectral/   FFT, framing, overlap-add, and hold
+├── io/         tap tempo and MIDI helpers
+├── interop/    transport and trigger messages
+├── presets/    a persistence interface
+├── ui/         small display helpers
+└── safety/     output guardrails
 
-## What This Repo Is Not
+examples/       things to run, hear, and change
+docs/           labels, origins, lab notes, and directions to explore
+```
 
-- not a complete audio framework
-- not a monolithic synth or effects firmware
-- not a vendor SDK replacement
-- not a polished product library with every edge case covered
+The code aims to keep the math and state visible, use fixed storage, and avoid
+allocation in the audio path. Native checks help keep the specimens usable as
+we change them. Each lab explains its units, timing, and simplifications;
+[the current limitations](docs/ROADMAP.md#current-limitations) include unfinished
+exercises and memory assumptions worth reading before building a larger patch.
 
-It is a teaching toolkit and a catalog of reusable musical mechanisms.
+## Room for more jars
 
-## Where To Start
+This collection will expand as the ideas shift. An older machine might give up
+another useful piece. A lesson might need a clearer version of something already
+here. Two specimens might suggest a new experiment neither source project had.
 
-If you want the shortest path:
+The [roadmap](docs/ROADMAP.md) keeps those possibilities visible. It can change
+with the work. Coverage grows through ideas worth teaching and revisiting.
 
-1. Read [TEACHING_GUIDE.md](/Users/bseverns/Documents/GitHub/tms-lib/docs/TEACHING_GUIDE.md).
-2. Open [Types.h](/Users/bseverns/Documents/GitHub/tms-lib/lib/tms/core/Types.h).
-3. Run [param_demo.ino](/Users/bseverns/Documents/GitHub/tms-lib/examples/param_demo.ino).
-4. Add one potentiometer and compare `Param`, `OnePoleLag`, and `SlewLimiter`.
-5. Build outward from there.
+If you're adding something, bring its label along: where it came from, what was
+simplified, and a small experiment that makes its behavior observable. Keep the
+header readable enough that someone can follow it and start changing it.
+[CONTRIBUTING.md](CONTRIBUTING.md) has the practical details.
+
+MIT licensed; see [LICENSE](LICENSE).

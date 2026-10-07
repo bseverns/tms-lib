@@ -1,0 +1,20 @@
+name: Native checks
+on: [push, pull_request]
+jobs:
+  native:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - run: cmake --build build --parallel
+      - run: ctest --test-dir build --output-on-failure
+      - run: ./build/tms_patch
+      - run: ./build/tms_drum build/drum_voice.wav
+      - run: ./build/tms_sample build/sample_playback.wav
+      - run: ./build/tms_convolution build/convolution.wav
+      - run: ./build/tms_granular build/granular.wav
+      - run: ./build/tms_frequency_shift build/frequency_shift.wav
+      - run: ./build/tms_spectral build/spectral_hold.wav

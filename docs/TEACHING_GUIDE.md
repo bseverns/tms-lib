@@ -1,6 +1,7 @@
 # Teaching Guide
 - This repo is intentionally header-only and classroom-friendly: each block is
-  small enough to read in one sitting and safe enough to drop into a sketch.
+  small enough to read in one sitting. Check memory and processing cadence
+  before dropping a block into a sketch.
 - Several newer exemplars were adapted from your sibling repos. See
   `docs/SOURCE_MAP.md` for provenance.
 
@@ -150,3 +151,34 @@
 - Group demo rig:
   One instructor-owned prewired board mirrored on a projector, plus student
   boards that only add one new component per lab.
+
+## Processing cadence
+
+`Param::tick()` uses the default audio sample rate, so a 10 ms smoothing time
+means 441 calls, not one call per 10 ms serial print. The parameter demo
+simulates those calls between prints. `OnePoleLag` and `SlewLimiter` instead
+express their rates per call. `WowFlutter` advances once per sample; the orbit
+demo simulates 882 samples per 20 ms print interval. These are nominal simulated
+intervals, not wall-clock accurate audio callbacks. `BlockParam::next()` returns
+the current value before advancing, reaching the target after the block.
+
+Run `examples/native/patch.cpp` through the README's CMake workflow for a
+hardware-free impulse-response lesson. Consult [ROADMAP.md](ROADMAP.md) for
+exercise stubs, concurrency limits, and fixed-buffer memory costs.
+
+## Native expansion labs
+
+After the serial experiments, follow [SYNTHESIS_LAB.md](SYNTHESIS_LAB.md),
+[SAMPLE_LAB.md](SAMPLE_LAB.md), [CONVOLUTION_LAB.md](CONVOLUTION_LAB.md),
+[GRANULAR_LAB.md](GRANULAR_LAB.md), and
+[FREQUENCY_SHIFT_LAB.md](FREQUENCY_SHIFT_LAB.md), and
+[SPECTRAL_LAB.md](SPECTRAL_LAB.md).
+These render audible WAV comparisons without a codec or attached board.
+
+## Move from laptop to audio callback
+
+Use [AUDIO_LAB.md](AUDIO_LAB.md) after the native listening experiments. It
+provides one SGTL5000 rig, seven selectable patches, and a callback/memory
+measurement procedure. Treat recorded board results as the evidence for
+real-time suitability; native correctness and firmware compilation are separate
+checks. No board timing results have been collected yet.

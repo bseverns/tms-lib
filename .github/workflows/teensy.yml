@@ -1,0 +1,12 @@
+name: Teensy audio lab
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install platformio==6.2.0
+      - run: pio run -e audio_lab41 -e audio_lab40

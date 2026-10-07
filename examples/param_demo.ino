@@ -19,7 +19,9 @@ void loop(){
   // chase it. This is a simple zipper-noise lecture in 10 lines.
   float step = (chaos.rand01()-0.5f)*200.0f;
   cutoff.setTarget(cutoff.current() + step);
-  float v = cutoff.tick();
+  // Simulate 10 ms at 44.1 kHz; serial printing is not the audio clock.
+  float v = cutoff.current();
+  for (int i = 0; i < tms::kSampleRate / 100; ++i) v = cutoff.tick();
   Serial.printf("target=%.1f current=%.1f\n", cutoff.target(), v);
   delay(10);
 }

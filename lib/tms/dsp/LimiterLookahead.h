@@ -1,4 +1,5 @@
 #pragma once
+// Teaching exercise: hard clipping only. No lookahead or release envelope yet.
 #include "tms/core/Types.h"
 namespace tms { struct LimiterLookahead{ float ceiling=dbToLinear(-1.0f); float releaseMs=50.0f;
   inline void setCeilingDb(float db){ ceiling=dbToLinear(db);} inline void setReleaseMs(float ms){releaseMs=ms;}

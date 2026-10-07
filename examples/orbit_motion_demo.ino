@@ -38,8 +38,11 @@ void loop() {
   air.setDistanceNorm(dist);
   air.process(l, r);
 
-  wow.beginBlock(1);
-  float delayModMs = wow.tick();
+  // Simulate the 20 ms between prints at the configured sample rate.
+  const int frames = tms::kSampleRate / 50;
+  wow.beginBlock(frames);
+  float delayModMs = 0.0f;
+  for (int i = 0; i < frames; ++i) delayModMs = wow.tick();
 
   Serial.printf("x=%.2f y=%.2f dist=%.2f air=(%.2f,%.2f) wow_ms=%.2f\n",
                 x, y, dist, l, r, delayModMs);
